@@ -1,36 +1,46 @@
-function marshal_table(map,tab_count)
-  local str=''
+function encode(map,tab_count)
+  --------------str为最终返回的CyBuf格式的字符串----------------
+  local cybuf_str=''
+  ----------计算制表符个数--------------
   for i=1,tab_count do
-    str=str..'\t'
+    cybuf_str=cybuf_str..'\t'
   end
   tab_count=tab_count+1
-  str=str.."{\n"
+  cybuf_str=cybuf_str.."{\n"
+  
   for i,v in pairs(map) do
     ----------计算制表符个数--------------
     for i=1,tab_count do
-      str=str..'\t'
+      cybuf_str=cybuf_str..'\t'
     end
     ----------处理非table元素-----------------
+    
     if(type(v)~="table") then
-      str=str..tostring(i)..': '
+      cybuf_str=cybuf_str..tostring(i)..': '
       if(type(v)=="string") then
-        str=str..'"'..tostring(v)..'"'
+        cybuf_str=cybuf_str..'"'..tostring(v)..'"'
       else
-        str=str..tostring(v)
+        cybuf_str=cybuf_str..tostring(v)
       end
-      str=str..'\n'
+      cybuf_str=cybuf_str..'\n'
+      
     ----------处理table元素-----------------
+    
     else
-      str=str..tostring(i)..': \n'
-      str=str..marshal_table(v,tab_count)
+      cybuf_str=cybuf_str..tostring(i)..': \n'
+      cybuf_str=cybuf_str..encode(v,tab_count)
     end
   end
-  str=str..'\n'
+  --------------------数据序列化完毕后，重新计算tab个数--------------------
+  cybuf_str=cybuf_str..'\n'
+  
   for i=1,tab_count-1 do
-    str=str..'\t'
+    cybuf_str=cybuf_str..'\t'
   end
-  str=str..'}\n'
-  return str
+  
+  cybuf_str=cybuf_str..'}\n'
+  
+  return cybuf_str
 end
 
 

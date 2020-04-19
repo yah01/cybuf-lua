@@ -11,6 +11,6 @@ a["school"]["name"]="Wuhan University"
 a["school"]["major"]={}
 a["school"]["major"]["name"]="CS"
 a["school"]["major"]["class"]="engineering"
-print(marshal_table(a,0))
+print(encode(a,0))
 
 
