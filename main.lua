@@ -1,6 +1,7 @@
 -----------该文件主要用于测试---------------
 
 require("encode")
+require("decode")
 
 a={}
 a["cy_name"]="cy"

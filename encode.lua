@@ -1,4 +1,10 @@
+-------------------encode函数主要负责将传入的table转化为CyBuf格式数据----------------
+
 function encode(map,tab_count)
+  --------------tab_count参数默认为0----------------
+  if(tab_count==nil) then
+    tab_count=0
+  end
   --------------str为最终返回的CyBuf格式的字符串----------------
   local cybuf_str=''
   ----------计算制表符个数--------------
