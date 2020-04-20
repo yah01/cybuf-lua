@@ -1,6 +1,13 @@
 function decode(cybuf_data)
-  
+  --[[-dasda
+  sdasdasd]]--
+  data_begin=1
   data_size=#cybuf_data
+  if(cybuf_data.sub(cybuf_data,1,1)=='{') then
+    data_begin=2
+    data_size=data_size-1
+  end
+  
   target_table={}
   cur_table=target_table
   cur_val=""
@@ -10,7 +17,7 @@ function decode(cybuf_data)
   is_in_colon=0 -----------表示当前空格前一位是否为冒号
   table_count=0 ----------表示当前table嵌套的层数
   
-  for i=2,data_size-1 do
+  for i=data_begin,data_size do
     c=cybuf_data.sub(cybuf_data,i,i)
     if(i==data_size-1 and cur_key~='') then
       target_table[cur_key]=cur_val
