@@ -3,6 +3,12 @@
 require("encode")
 require("decode")
 
+a={1,2,3}
+print(table.insert(a,2))
+
+a=nil
+print(a)
+
 a={}
 a["cy_name"]="cy"
 a["cy_age"]=21
