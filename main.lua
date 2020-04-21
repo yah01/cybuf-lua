@@ -3,9 +3,9 @@
 require("encode")
 --require("decode")
 
-for i=0,9 do
+for i=0,9,0.5 do
   if(i==4) then
-    i=i+1
+    i=i+0.7
   end
   print(i)
 end

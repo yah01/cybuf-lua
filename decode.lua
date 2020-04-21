@@ -19,8 +19,8 @@ end
 
 -------------------decode主函数-------------------
 function decode(cybuf_data)
-  --[[-dasda
-  sdasdasd]]--
+  
+  ------计算数据起始点-----
   local data_begin=1
   local data_size=#cybuf_data
   local begin_char=cybuf_data.sub(cybuf_data,data_begin,data_begin)
@@ -29,6 +29,7 @@ function decode(cybuf_data)
     begin_char=cybuf_data.sub(cybuf_data,data_begin,data_begin)
   end
   
+  ------计算数据结束点-----
   if(cybuf_data.sub(cybuf_data,data_begin,data_begin)=='{') then
     data_begin=data_begin+1
     local end_char=cybuf_data.sub(cybuf_data,data_size,data_size)
@@ -50,28 +51,45 @@ function decode(cybuf_data)
   local is_in_colon=false -----------表示当前空格前一位是否为冒号
   local table_count=0 ----------表示当前table嵌套的层数，待完成
   
-  for i=data_begin,data_size do
-    local c=cybuf_data.sub(cybuf_data,i,i)
-    if(i==data_size and cur_key~='') then
-      cur_val=cur_val..c
-      target_table[cur_key]=class_identify(cur_val)
+  local i=data_begin
+  while(i<=data_size) do
+ -- for i=data_begin,data_size do
+    if(cur_key=='{') then
+      print(i,'???')
     end
     
+    local c=cybuf_data.sub(cybuf_data,i,i)
+    if(i==data_size and cur_key~='') then
+      if(c~=' ') then
+        cur_val=cur_val..c
+      end
+      target_table[cur_key]=class_identify(cur_val)
+    end
+-----------------table型数据--------------------
     if(c=='{') then
-      --[[-----table型数据-----------
-      local son_data='{'
+    --  print(i,'!')
+      ---[[-----table型数据-----------
+      local son_data=''
       local son_ch=c
       local son_is_in_string=false
       while(son_ch~='}' or son_is_in_string) do
         i=i+1
+        if(son_ch=='"') then
+          son_is_in_string=not son_is_in_string
+        end
         son_data=son_data..son_ch
         son_ch=cybuf_data.sub(cybuf_data,i,i)
       end
+      --if()
       son_data=son_data..'}'
-      print(son_data)
+   --   print(son_data..'??')
+      i=i+1
+   --   print(i,'!')
+      target_table[cur_key]=decode(son_data)
       --]]--
-    --  target_table[cur_key]=decode(son_data)
-      --]]--
+      cur_status=0
+      cur_key=''
+      
       goto continue
     end
     
@@ -104,10 +122,12 @@ function decode(cybuf_data)
         goto continue
       end
       if(c==' ') then
-        if(is_in_colon) then
+      ---[[  
+          if(is_in_colon) then
           is_in_colon=false
           goto continue
         end
+        --]]--
         
         if(cur_key~='') then
           target_table[cur_key]=class_identify(cur_val)
@@ -126,6 +146,7 @@ function decode(cybuf_data)
     end
     
     ::continue::
+    i=i+1
   end
 
   return target_table
@@ -134,12 +155,20 @@ end
 
 --a='{	cy_name: "cy"	cy_age: 21	cy_is_virginal: false}'
 print("------------------分割线-------------------")
-a='     {       Name:"hello"Age:10   Live: true}   '
+a='{school: {name: "whu"  age: 120   is_good: true }       Name:"hello"  Age:10   Live: true     }'
+a2='  {   Name:"hello"  Age:10   Live: true     }   '
 aa=decode(a)
 b={}
 b["aa"]=11
 for i,v in pairs(aa) do
-  print(i,':',v,type(v))
+  if(type(v)=="table") then
+    print(i,':')
+    for i,vv in pairs(v) do
+      print('\t',i,':',vv,type(vv))
+    end
+  else
+    print(i,':',v,type(v))
+  end
 end
 print("------------------分割线-------------------")
 
