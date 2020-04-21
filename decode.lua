@@ -17,6 +17,15 @@ function class_identify(val)
   return des_val
 end
 
+
+--------------字符空格判断----------------
+function judge_space_char(char)
+  if(char==' ' or char=='\t' or char=='\n' or char=='\r') then
+    return true
+  end
+  return false
+end
+
 -------------------decode主函数-------------------
 function decode(cybuf_data)
   
@@ -24,7 +33,7 @@ function decode(cybuf_data)
   local data_begin=1
   local data_size=#cybuf_data
   local begin_char=cybuf_data.sub(cybuf_data,data_begin,data_begin)
-  while(begin_char==' ' or begin_char=='\t' or begin_char=='\n' or begin_char=='\r') do
+  while(judge_space_char(begin_char)) do
     data_begin=data_begin+1
     begin_char=cybuf_data.sub(cybuf_data,data_begin,data_begin)
   end
@@ -33,7 +42,7 @@ function decode(cybuf_data)
   if(cybuf_data.sub(cybuf_data,data_begin,data_begin)=='{') then
     data_begin=data_begin+1
     local end_char=cybuf_data.sub(cybuf_data,data_size,data_size)
-    while(end_char==' ' or end_char=='\t' or end_char=='\n' or end_char=='\r') do
+    while(judge_space_char(end_char)) do
       data_size=data_size-1
       end_char=cybuf_data.sub(cybuf_data,data_size,data_size)
     end
