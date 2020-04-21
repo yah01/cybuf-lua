@@ -152,14 +152,34 @@ function decode(cybuf_data)
   return target_table
 end
 
+function table_output(target_table,table_count)
+  if(table_count==nil) then
+    table_count=0
+  end
+  
+  for i,v in pairs(aa) do
+    for i=0,table_count do
+      print('\t')
+    end
+    if(type(v)=="table") then
+      print(i,':\n')
+      table_output(v,table_count+1)
+    else
+      print(i,':',v,type(v))
+    end
+  end
+end
+
+
 
 --a='{	cy_name: "cy"	cy_age: 21	cy_is_virginal: false}'
-print("------------------分割线-------------------")
+
 a='{school: {name: "whu"  age: 120   is_good: true }       Name:"hello"  Age:10   Live: true     }'
 a2='  {   Name:"hello"  Age:10   Live: true     }   '
 aa=decode(a)
 b={}
 b["aa"]=11
+print("------------------分割线-------------------")
 for i,v in pairs(aa) do
   if(type(v)=="table") then
     print(i,':')
