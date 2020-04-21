@@ -23,9 +23,22 @@ function decode(cybuf_data)
   sdasdasd]]--
   local data_begin=1
   local data_size=#cybuf_data
-  if(cybuf_data.sub(cybuf_data,1,1)=='{') then
-    data_begin=2
-    data_size=data_size-1
+  local begin_char=cybuf_data.sub(cybuf_data,data_begin,data_begin)
+  while(begin_char==' ' or begin_char=='\t' or begin_char=='\n' or begin_char=='\r') do
+    data_begin=data_begin+1
+    begin_char=cybuf_data.sub(cybuf_data,data_begin,data_begin)
+  end
+  
+  if(cybuf_data.sub(cybuf_data,data_begin,data_begin)=='{') then
+    data_begin=data_begin+1
+    local end_char=cybuf_data.sub(cybuf_data,data_size,data_size)
+    while(end_char==' ' or end_char=='\t' or end_char=='\n' or end_char=='\r') do
+      data_size=data_size-1
+      end_char=cybuf_data.sub(cybuf_data,data_size,data_size)
+    end
+    if(cybuf_data.sub(cybuf_data,data_size,data_size)=='}') then
+      data_size=data_size-1
+    end
   end
   
   local target_table={}
@@ -45,12 +58,25 @@ function decode(cybuf_data)
     end
     
     if(c=='{') then
-      -------table型数据-----------
+      --[[-----table型数据-----------
+      local son_data='{'
+      local son_ch=c
+      local son_is_in_string=false
+      while(son_ch~='}' or son_is_in_string) do
+        i=i+1
+        son_data=son_data..son_ch
+        son_ch=cybuf_data.sub(cybuf_data,i,i)
+      end
+      son_data=son_data..'}'
+      print(son_data)
+      --]]--
+    --  target_table[cur_key]=decode(son_data)
+      --]]--
       goto continue
     end
     
     if(c=='"') then
-      if(is_in_string==true) then
+      if(is_in_string) then
         is_in_string=false
         target_table[cur_key]=class_identify(cur_val)
         cur_key=""
@@ -62,7 +88,7 @@ function decode(cybuf_data)
       goto continue
     end
     
-    if(is_in_string==true) then
+    if(is_in_string) then
       if(cur_status==0) then
         cur_key=cur_key..c
       else
@@ -71,14 +97,14 @@ function decode(cybuf_data)
       goto continue
     end
     
-    if(is_in_string==false) then
+    if(not is_in_string) then
       if(c==':') then
         cur_status=1
         is_in_colon=true
         goto continue
       end
       if(c==' ') then
-        if(is_in_colon==true) then
+        if(is_in_colon) then
           is_in_colon=false
           goto continue
         end
@@ -108,7 +134,7 @@ end
 
 --a='{	cy_name: "cy"	cy_age: 21	cy_is_virginal: false}'
 print("------------------分割线-------------------")
-a='{Name:"hello"Age:10   Live: true}'
+a='     {       Name:"hello"Age:10   Live: true}   '
 aa=decode(a)
 b={}
 b["aa"]=11

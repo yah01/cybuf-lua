@@ -3,27 +3,12 @@
 require("encode")
 --require("decode")
 
-a={1,2,3}
---print(table.insert(a,2))
-
-function f(ff)
-  local tt=ff
-  if(tt=="true") then
-    tt=true
+for i=0,9 do
+  if(i==4) then
+    i=i+1
   end
-  
-  
-  return tt
+  print(i)
 end
-
-
-a="true"
-print(a)
---a=true
-a=tonumber(a)
-print(a)
-a=tostring(a)..'!'
-print(a)
 
 
 a={}
@@ -35,6 +20,6 @@ a["school"]["name"]="Wuhan University"
 a["school"]["major"]={}
 a["school"]["major"]["name"]="CS"
 a["school"]["major"]["class"]="engineering"
---print(encode(a,0))
+print(encode(a))
 
 
