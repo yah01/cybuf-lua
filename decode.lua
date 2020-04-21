@@ -152,20 +152,22 @@ function decode(cybuf_data)
   return target_table
 end
 
+
+----------------输出decode返回的table----------------
 function table_output(target_table,table_count)
   if(table_count==nil) then
     table_count=0
   end
   
-  for i,v in pairs(aa) do
+  for i,v in pairs(target_table) do
     for i=0,table_count do
-      print('\t')
+      print('    ')
     end
     if(type(v)=="table") then
       print(i,':\n')
       table_output(v,table_count+1)
     else
-      print(i,':',v,type(v))
+      print(i,':',v,'('..type(v)..')')
     end
   end
 end
@@ -176,10 +178,13 @@ end
 
 a='{school: {name: "whu"  age: 120   is_good: true }       Name:"hello"  Age:10   Live: true     }'
 a2='  {   Name:"hello"  Age:10   Live: true     }   '
-aa=decode(a)
+a3='{ Name: "a hack data } " }'
+aa=decode(a3)
 b={}
 b["aa"]=11
 print("------------------分割线-------------------")
+
+---[[
 for i,v in pairs(aa) do
   if(type(v)=="table") then
     print(i,':')
@@ -190,5 +195,7 @@ for i,v in pairs(aa) do
     print(i,':',v,type(v))
   end
 end
+--]]--
+--table_output(aa)
 print("------------------分割线-------------------")
 
