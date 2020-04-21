@@ -1,6 +1,15 @@
 -----------该文件主要用于测试---------------
 
 require("encode")
+--require("decode")
+
+for i=0,9,0.5 do
+  if(i==4) then
+    i=i+0.7
+  end
+  print(i)
+end
+
 
 a={}
 a["cy_name"]="cy"
@@ -11,6 +20,6 @@ a["school"]["name"]="Wuhan University"
 a["school"]["major"]={}
 a["school"]["major"]["name"]="CS"
 a["school"]["major"]["class"]="engineering"
-print(encode(a,0))
+print(encode(a))
 
 
